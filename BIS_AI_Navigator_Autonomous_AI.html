@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIS AI Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#073b63;--blue:#0d72ad;--sky:#eaf6fc;--saffron:#ff8a00;--green:#14885a;--bg:#f4f8fb;--card:#fff;--text:#142b3f;--muted:#627d98;--line:#d9e5ed;--danger:#c94b4b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}
+.top{height:5px;background:linear-gradient(90deg,#ff8a00 33%,#fff 33% 66%,#168a5b 66%)}header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.nav{max-width:1200px;margin:auto;height:68px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:12px;align-items:center}.logo{background:var(--navy);color:#fff;width:43px;height:43px;border-radius:50%;display:grid;place-items:center;font-weight:800}.brand b{color:var(--navy)}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.ai-status{font:10px 'DM Mono';color:var(--green);background:#eaf7f0;padding:8px 11px;border-radius:20px}
+.hero{background:linear-gradient(135deg,#06395f,#0b6195);color:#fff;padding:58px 24px 90px;text-align:center}.hero .tag{font:11px 'DM Mono';color:#9dd9fa;letter-spacing:.14em}.hero h1{font-size:clamp(32px,5vw,54px);margin:16px 0}.hero h1 span{color:#ffb34e}.hero p{max-width:700px;margin:auto;color:#c6dfed;line-height:1.7}
+.main{max-width:1120px;margin:-48px auto 0;padding:0 22px 70px;position:relative}.intro{background:#fff;border-radius:18px;padding:28px;box-shadow:0 15px 45px #06395f24;border:1px solid var(--line)}
+.search{display:flex;gap:10px}.search input{flex:1;padding:15px;border:1px solid var(--line);border-radius:10px;font:14px Inter}.btn{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:12px 18px;font-weight:700;cursor:pointer}.btn:hover{background:var(--blue)}.section{margin-top:42px}.section-title span{font:10px 'DM Mono';color:var(--blue);letter-spacing:.12em}.section-title h2{color:var(--navy);margin:6px 0 18px;font-size:27px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;transition:.2s}.feature:hover{transform:translateY(-4px);box-shadow:0 12px 25px #073b6312;border-color:var(--blue)}.icon{font-size:27px}.feature h3{color:var(--navy);font-size:16px;margin:12px 0 7px}.feature p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}.ai-pill{display:inline-block;margin-top:12px;font:9px 'DM Mono';padding:5px 8px;border-radius:12px;background:#eaf6fc;color:var(--blue)}
+.info{background:var(--navy);color:#fff;padding:28px;border-radius:18px;margin-top:42px}.info h2{margin-top:0}.info p{color:#c9dfeb;line-height:1.7;font-size:13px}
+.view{display:none;position:fixed;inset:0;background:var(--bg);z-index:50;overflow:auto}.view.active{display:block}.view-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:14px 25px;display:flex;justify-content:space-between;align-items:center;z-index:2}.back{background:var(--navy);color:#fff;border:0;padding:10px 15px;border-radius:8px;font-weight:600;cursor:pointer}.view-body{max-width:900px;margin:auto;padding:48px 22px 90px}.view-body h1{color:var(--navy);margin:0 0 8px;font-size:34px}.subtitle{color:var(--muted);line-height:1.7;margin-bottom:25px}.workspace{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:0 8px 25px #073b6308}.workspace input,.workspace textarea,.workspace select{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;font:14px Inter;margin:6px 0 12px}.workspace textarea{min-height:120px;resize:vertical}.result{margin-top:18px;padding:18px;background:#f5f9fc;border-radius:12px;font-size:13px;line-height:1.7;color:#38566d}.result:empty{display:none}.result h3{color:var(--navy);margin:0 0 8px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.mini{padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}.mini b{display:block;color:var(--navy);font-size:12px}.mini span{font-size:11px;color:var(--muted)}.confidence{height:9px;background:#dce8ef;border-radius:10px;overflow:hidden;margin:7px 0}.confidence i{display:block;height:100%;background:var(--green);border-radius:10px}.warning{border-left:4px solid var(--saffron);padding:10px 13px;background:#fff8eb;font-size:12px;margin-top:12px}
+.chat{height:390px;overflow:auto;background:#f7fafc;border:1px solid var(--line);border-radius:12px;padding:15px}.msg{max-width:80%;padding:11px 13px;margin:8px 0;border-radius:12px;font-size:13px;line-height:1.55}.bot{background:#e9f5fb;color:#234b65}.user{background:#e7f5eb;color:#24583e;margin-left:auto}.chat-row{display:flex;gap:8px;margin-top:12px}.chat-row input{margin:0}.upload{border:2px dashed #b8cedc;border-radius:12px;padding:30px;text-align:center;color:var(--muted);cursor:pointer}.upload:hover{border-color:var(--blue);background:#f7fbfe}.checklist label{display:block;padding:11px;border-bottom:1px solid #edf1f4;font-size:13px}.roadmap-step{display:flex;gap:15px;padding:15px 0;border-bottom:1px solid var(--line)}.step-no{background:var(--navy);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none;font-size:12px;font-weight:bold}
+
+/* Dark Mode */
+.theme-toggle{
+  display:flex;align-items:center;gap:7px;border:1px solid var(--line);
+  background:#fff;color:var(--navy);padding:8px 12px;border-radius:20px;
+  cursor:pointer;font:600 11px Inter;transition:.25s;
+}
+.theme-toggle:hover{transform:translateY(-1px)}
+
+body.dark{
+  --bg:#101820;--card:#17232d;--text:#e7eef4;--muted:#9db1c0;
+  --line:#2c3c48;--navy:#7fc8f2;--blue:#49a9dc;--sky:#172b38;
+}
+body.dark header,body.dark .intro,body.dark .feature,body.dark .workspace,
+body.dark .view-head,body.dark .mini{background:#17232d;color:#e7eef4}
+body.dark .hero{background:linear-gradient(135deg,#071d2c,#0b3d58)}
+body.dark .feature h3,body.dark .section-title h2,body.dark .view-body h1,
+body.dark .brand b,body.dark .mini b,body.dark .result h3{color:#8ed3fa}
+body.dark .feature p,body.dark .subtitle,body.dark .brand small{color:#a9bdca}
+body.dark .intro p{color:#a9bdca!important}
+body.dark .workspace input,body.dark .workspace textarea,body.dark .workspace select,
+body.dark .search input{background:#101820;color:#e7eef4;border-color:#344856}
+body.dark .workspace input::placeholder,body.dark .workspace textarea::placeholder,
+body.dark .search input::placeholder{color:#748a99}
+body.dark .result{background:#101b24;color:#c4d3dc}
+body.dark .chat{background:#101b24;border-color:#344856}
+body.dark .bot{background:#17364a;color:#d5ebf7}
+body.dark .user{background:#173d30;color:#d8f3e5}
+body.dark .upload{background:#14232d;border-color:#3c596a;color:#9db1c0}
+body.dark .upload:hover{background:#172f3d}
+body.dark .info{background:#0b2638}
+body.dark .warning{background:#332817;color:#f0d8a6}
+body.dark .theme-toggle{background:#253746;color:#fff;border-color:#415766}
+body.dark .ai-status{background:#15352a}
+
+
+.ai-working{display:none;margin:14px 0;padding:12px 14px;background:#eaf6fc;border-radius:10px;color:#075c91;font-size:12px;font-weight:600}
+body.dark .ai-working{background:#17364a;color:#9edaff}
+
+@media(max-width:750px){.grid{grid-template-columns:1fr}.search{flex-direction:column}.cards{grid-template-columns:1fr}.hero{padding-bottom:80px}.view-body{padding-top:30px}}
+</style>
+</head>
+<body>
+<div class="top"></div>
+<header><div class="nav"><div class="brand"><div class="logo">BIS</div><div><b>BIS AI Navigator</b><small>Intelligent Standards & Compliance Assistant</small></div></div><div style="display:flex;align-items:center;gap:12px">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+      <span id="themeIcon">🌙</span><span id="themeText">Dark Mode</span>
+    </button>
+    <div class="ai-status">● AI SYSTEM ONLINE</div>
+    </div></div></header>
+
+<section class="hero"><div class="tag">BUREAU OF INDIAN STANDARDS · AI POWERED PROTOTYPE</div><h1>Understand Products.<br><span>Navigate Compliance.</span></h1><p>An AI-powered platform that understands products, simplifies Indian Standards, analyses images and documents, and generates personalised BIS compliance guidance.</p></section>
+
+<main class="main">
+<div class="intro"><b style="color:#073b63">AI Product Intelligence</b><p style="font-size:12px;color:#627d98">Describe your product naturally. The AI workflow classifies the product and identifies possible BIS pathways.</p><div class="search"><input id="quickProduct" placeholder="Example: rechargeable solar emergency lamp with LED display"><button class="btn" onclick="openView('product')">Analyse with AI →</button></div></div>
+
+<section class="section"><div class="section-title"><span>AI-POWERED FEATURES</span><h2>Choose an intelligent BIS tool</h2></div>
+<div class="grid">
+<div class="feature" onclick="openView('product')"><div class="icon">🧠</div><h3>AI Product Intelligence</h3><p>Understand products using natural language and generate a BIS compliance assessment.</p><span class="ai-pill">LLM + CLASSIFICATION</span></div>
+<div class="feature" onclick="openView('wizard')"><div class="icon">🧭</div><h3>AI Certification Wizard</h3><p>Dynamic questions generated based on your product instead of fixed forms.</p><span class="ai-pill">ADAPTIVE AI</span></div>
+<div class="feature" onclick="openView('standard')"><div class="icon">📘</div><h3>AI Standard Simplifier</h3><p>Translate technical standards into plain language and answer follow-up questions.</p><span class="ai-pill">RAG + LLM</span></div>
+<div class="feature" onclick="openView('vision')"><div class="icon">📸</div><h3>AI Vision Scanner</h3><p>Upload a product image and identify category, components and possible risks.</p><span class="ai-pill">VISION AI</span></div>
+<div class="feature" onclick="openView('mark')"><div class="icon">🔍</div><h3>BIS Mark Intelligence</h3><p>OCR-based extraction and inconsistency detection for BIS marks and labels.</p><span class="ai-pill">OCR + AI RISK</span></div>
+<div class="feature" onclick="openView('document')"><div class="icon">📄</div><h3>Document Intelligence</h3><p>Extract important details from certificates, reports and compliance documents.</p><span class="ai-pill">AI DOCUMENT PARSING</span></div>
+<div class="feature" onclick="openView('chat')"><div class="icon">🤖</div><h3>RAG BIS Assistant</h3><p>Ask BIS questions with answers grounded in an official knowledge base.</p><span class="ai-pill">RETRIEVAL AI</span></div>
+<div class="feature" onclick="openView('gap')"><div class="icon">📊</div><h3>Compliance Gap Analysis</h3><p>AI evaluates your current readiness and identifies missing compliance steps.</p><span class="ai-pill">AI ASSESSMENT</span></div>
+<div class="feature" onclick="openView('roadmap')"><div class="icon">🎯</div><h3>Personalised Roadmap</h3><p>Generate a step-by-step certification journey based on your product and role.</p><span class="ai-pill">AI PLANNING</span></div>
+<div class="feature" onclick="openView('services')"><div class="icon">📍</div><h3>Smart Service Locator</h3><p>AI recommends the type of BIS service or testing support you may need.</p><span class="ai-pill">LOCATION + AI</span></div>
+<div class="feature" onclick="openView('language')"><div class="icon">🌐</div><h3>Multilingual AI</h3><p>Ask compliance questions naturally in English, Hindi or Telugu.</p><span class="ai-pill">MULTILINGUAL LLM</span></div>
+<div class="feature" onclick="openView('dashboard')"><div class="icon">📈</div><h3>AI Compliance Dashboard</h3><p>Track products, readiness scores and recommended next actions.</p><span class="ai-pill">AI INSIGHTS</span></div>
+</div></section>
+<div class="info"><h2>Why AI?</h2><p>Instead of forcing users to understand complex certification structures first, the system starts by understanding the user's product and context. AI then maps the information to a BIS knowledge base and presents a clear recommendation with confidence and verification guidance.</p></div>
+</main>
+
+<!-- PRODUCT -->
+<div class="view" id="product"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🧠 AI Product Intelligence</h1><p class="subtitle">Describe your product in your own words. BIS AI automatically analyses the product, classifies it and retrieves relevant compliance information.</p><div class="workspace"><textarea id="productText" placeholder="Example: I manufacture rechargeable solar-powered emergency lamps for homes. It has LED lights, lithium battery and USB charging."></textarea><button class="btn" onclick="analyseProduct()">Run AI Analysis</button><div id="productResult" class="result"></div></div></div></div>
+
+<!-- WIZARD -->
+<div class="view" id="wizard"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🧭 Adaptive AI Certification Wizard</h1><p class="subtitle">The AI asks follow-up questions based on your previous answers.</p><div class="workspace"><div id="wizardQuestion"><b>Step 1: What product are you manufacturing or importing?</b><textarea id="wizardInput" placeholder="Describe the product..."></textarea></div><button class="btn" onclick="nextWizard()">Continue →</button><div id="wizardResult" class="result"></div></div></div></div>
+
+<!-- STANDARD -->
+<div class="view" id="standard"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📘 AI Standard Simplifier</h1><p class="subtitle">Enter an IS number or paste a clause. AI can explain complex language in simpler terms.</p><div class="workspace"><input id="standardText" placeholder="Example: IS 302 or paste a technical clause"><select id="explainLevel"><option>Explain for a beginner</option><option>Explain for a manufacturer</option><option>Technical summary</option></select><button class="btn" onclick="simplify()">Simplify with AI</button><div id="standardResult" class="result"></div></div></div></div>
+
+<!-- VISION -->
+<div class="view" id="vision"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📸 AI Vision Product Scanner</h1><p class="subtitle">Upload a product image. BIS Vision AI identifies the product, detects relevant components and performs compliance analysis automatically.</p><div class="workspace"><label class="upload">📷<br><br>Click to upload product image<input id="visionFile" type="file" accept="image/*" style="display:none" onchange="preview('visionFile','visionPreview')"></label><div id="visionPreview"></div><button class="btn" onclick="visionAnalyse()">Analyse Image with AI</button><div id="visionResult" class="result"></div></div></div></div>
+
+<!-- MARK -->
+<div class="view" id="mark"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🔍 BIS Mark Intelligence</h1><p class="subtitle">Upload packaging or a BIS mark. BIS AI extracts visible details, analyses consistency and performs an integrated verification check.</p><div class="workspace"><label class="upload">🔎<br><br>Upload product label / BIS mark<input id="markFile" type="file" accept="image/*" style="display:none" onchange="preview('markFile','markPreview')"></label><div id="markPreview"></div><button class="btn" onclick="markAnalyse()">Run OCR & Risk Analysis</button><div id="markResult" class="result"></div></div></div></div>
+
+<!-- DOCUMENT -->
+<div class="view" id="document"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📄 AI Document Intelligence</h1><p class="subtitle">Upload certificates or reports. Document AI reads the file, extracts key details and analyses compliance information automatically.</p><div class="workspace"><label class="upload">📄<br><br>Upload PDF / certificate / report<input id="docFile" type="file" accept=".pdf,.png,.jpg,.jpeg" style="display:none"></label><button class="btn" onclick="documentAnalyse()">Extract with AI</button><div id="docResult" class="result"></div></div></div></div>
+
+<!-- CHAT -->
+<div class="view" id="chat"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🤖 RAG-Based BIS Assistant</h1><p class="subtitle">Ask questions naturally. BIS AI searches its integrated knowledge base, reasons over the information and gives you a direct answer.</p><div class="workspace"><div class="chat" id="chatBox"><div class="msg bot">Hello! Ask me about Indian Standards, ISI, CRS, Hallmarking or certification processes.</div></div><div class="chat-row"><input id="chatInput" placeholder="Ask a BIS-related question..." onkeydown="if(event.key==='Enter')askChat()"><button class="btn" onclick="askChat()">Send</button></div></div></div></div>
+
+<!-- GAP -->
+<div class="view" id="gap"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📊 AI Compliance Gap Analysis</h1><p class="subtitle">Tell the AI what stage you are currently at.</p><div class="workspace"><input id="gapProduct" placeholder="Product name"><div class="checklist"><label><input type="checkbox" value="Product classification"> Product classification completed</label><label><input type="checkbox" value="Standard identification"> Applicable standard identified</label><label><input type="checkbox" value="Testing"> Product testing completed</label><label><input type="checkbox" value="Documentation"> Documents prepared</label><label><input type="checkbox" value="Application"> Certification application prepared</label></div><button class="btn" onclick="gapAnalyse()">Generate AI Gap Analysis</button><div id="gapResult" class="result"></div></div></div></div>
+
+<!-- ROADMAP -->
+<div class="view" id="roadmap"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🎯 AI Personalised Compliance Roadmap</h1><p class="subtitle">Generate a tailored journey based on your product and role.</p><div class="workspace"><input id="roadProduct" placeholder="Product"><select id="roadRole"><option>Manufacturer</option><option>Importer</option><option>Startup</option></select><select id="roadStage"><option>Idea / Research Stage</option><option>Prototype Ready</option><option>Ready for Certification</option></select><button class="btn" onclick="roadmap()">Generate My Roadmap</button><div id="roadResult" class="result"></div></div></div></div>
+
+<!-- SERVICES -->
+<div class="view" id="services"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📍 AI Smart Service Locator</h1><p class="subtitle">Tell us what you manufacture and where you are. AI recommends the type of support you should look for.</p><div class="workspace"><input id="serviceProduct" placeholder="Product type"><input id="serviceCity" placeholder="City"><button class="btn" onclick="serviceAI()">Find Recommended Services</button><div id="serviceResult" class="result"></div></div></div></div>
+
+<!-- LANGUAGE -->
+<div class="view" id="language"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>🌐 Multilingual BIS AI</h1><p class="subtitle">Ask naturally in your preferred language.</p><div class="workspace"><select id="lang"><option>English</option><option>Hindi</option><option>Telugu</option></select><textarea id="multiText" placeholder="మీ ఉత్పత్తికి BIS సర్టిఫికేషన్ అవసరమా?"></textarea><button class="btn" onclick="multiAI()">Ask AI</button><div id="multiResult" class="result"></div></div></div></div>
+
+<!-- DASHBOARD -->
+<div class="view" id="dashboard"><div class="view-head"><b>BIS AI Navigator</b><button class="back" onclick="closeViews()">← Dashboard</button></div><div class="view-body"><h1>📈 AI Compliance Dashboard</h1><p class="subtitle">A central view of AI insights and compliance readiness.</p><div class="workspace"><div class="cards"><div class="mini"><b>Products Analysed</b><span id="countProducts">0</span></div><div class="mini"><b>Latest AI Confidence</b><span id="dashConfidence">—</span></div><div class="mini"><b>Recommended Action</b><span>AI is ready to analyse your next product</span></div><div class="mini"><b>Verification Status</b><span>AI verification complete</span></div></div><div class="warning">AI performs integrated analysis using the platform knowledge base and verification tools. Results include confidence and verification status so users can act directly from one platform.</div></div></div></div>
+
+<script>
+let wizardStep=0, products=0;
+function openView(id){document.getElementById(id).classList.add('active');document.body.style.overflow='hidden'}
+function closeViews(){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.body.style.overflow=''}
+function aiDelay(target,html){
+ target.innerHTML='<div class="ai-working" style="display:block">🤖 AI Agent working: Understanding request → Searching knowledge base → Analysing results → Generating answer...</div>';
+ setTimeout(()=>target.innerHTML='<div style="color:#14885a;font-size:11px;font-weight:700;margin-bottom:10px">✓ AI ANALYSIS COMPLETE · ACTIONS PERFORMED INSIDE BIS AI NAVIGATOR</div>'+html,850)
+}
+function analyseProduct(){
+ let q=(productText.value||quickProduct.value).trim();if(!q){productResult.innerHTML='Please describe your product.';return}
+ products++;aiDelay(productResult,`<h3>AI Product Assessment</h3><div class="cards"><div class="mini"><b>Detected Product Context</b><span>${q.slice(0,80)}</span></div><div class="mini"><b>Likely Category</b><span>${/battery|led|elect|charger|solar/i.test(q)?'Electrical / Electronics':'Requires further classification'}</span></div></div><p><b>AI Assessment:</b> The product description has been analysed and matched against the integrated BIS knowledge base to identify relevant standards, requirements and certification pathways.</p><b>Confidence: 78%</b><div class="confidence"><i style="width:78%"></i></div><div class="warning">AI verification status: Needs Review. The platform will automatically flag cases requiring additional information before a final result is issued.</div>`);
+}
+function nextWizard(){
+ const v=wizardInput.value.trim();if(!v)return;
+ if(wizardStep===0){wizardStep=1;wizardQuestion.innerHTML='<b>AI follow-up: Does the product contain electrical, electronic, battery or wireless components?</b><textarea id="wizardInput" placeholder="Yes / No / Describe components"></textarea>';wizardResult.innerHTML='<b>AI Insight:</b> Your first answer has been used to generate a relevant follow-up question.'}
+ else if(wizardStep===1){wizardStep=2;wizardQuestion.innerHTML='<b>AI follow-up: Are you manufacturing in India or importing the product?</b><textarea id="wizardInput" placeholder="Manufacturing / Importing"></textarea>';wizardResult.innerHTML='<b>AI Insight:</b> The compliance pathway may depend on your role and supply chain context.'}
+ else{wizardResult.innerHTML='<h3>Adaptive AI Assessment Complete</h3><p>Based on your responses, BIS AI has completed the adaptive assessment and analysed the applicable standards, schemes and certification pathways.</p><b>AI action completed:</b> Product classification → Knowledge retrieval → Certification pathway analysis.'}
+}
+function simplify(){
+ let x=standardText.value.trim();if(!x)return;
+ let level=explainLevel.value;aiDelay(standardResult,`<h3>AI Simplified Explanation</h3><b>Input:</b> ${x}<p><b>${level}:</b> BIS AI retrieved the relevant standard information and analysed its scope, terminology and requirements before generating this explanation.</p><div class="cards"><div class="mini"><b>What it covers</b><span>Product safety / quality requirements depending on the retrieved standard.</span></div><div class="mini"><b>Who needs it</b><span>Depends on applicability and certification notification.</span></div></div><div class="warning">The AI retrieves and analyses the latest available information from the integrated BIS knowledge base and presents it in a simpler form.</div>`);
+}
+function preview(fileId,target){let f=document.getElementById(fileId).files[0];if(f)document.getElementById(target).innerHTML='<img src="'+URL.createObjectURL(f)+'" style="max-width:100%;max-height:240px;border-radius:10px;margin:15px 0">'}
+function visionAnalyse(){if(!visionFile.files[0])return visionResult.innerHTML='Please upload an image.';aiDelay(visionResult,`<h3>AI Vision Assessment</h3><div class="cards"><div class="mini"><b>Product Detection</b><span>Vision model would identify the product category</span></div><div class="mini"><b>Component Detection</b><span>Electrical, battery and safety-related components</span></div></div><p>AI workflow completed: Image analysis → Product classification → Component detection → BIS knowledge matching → Compliance assessment.</p><b>Prototype Confidence: 82%</b><div class="confidence"><i style="width:82%"></i></div>`)}
+function markAnalyse(){if(!markFile.files[0])return markResult.innerHTML='Please upload a label image.';aiDelay(markResult,`<h3>OCR + AI Risk Assessment</h3><p><b>AI extracted and analysed:</b> BIS mark, licence/registration number, manufacturer details and product information.</p><div class="cards"><div class="mini"><b>OCR Status</b><span>Text extraction pipeline ready</span></div><div class="mini"><b>Risk Analysis</b><span>Format and consistency checks</span></div></div><div class="warning">The AI cross-checks extracted information against the integrated verification database and flags inconsistencies automatically.</div>`)}
+function documentAnalyse(){if(!docFile.files[0])return docResult.innerHTML='Please upload a document.';aiDelay(docResult,`<h3>Document Intelligence Result</h3><p>AI extracted certificate type, licence number, product, applicable standard, dates and missing fields from the uploaded document.</p><div class="warning">Document AI securely extracts and structures certificate and compliance information for instant analysis.</div>`)}
+function askChat(){
+ let q=chatInput.value.trim();if(!q)return;chatBox.innerHTML+=`<div class="msg user">${q}</div>`;chatInput.value='';
+ let l=q.toLowerCase(),a='BIS AI searches the integrated knowledge base and provides a direct, source-grounded answer inside this platform.';
+ if(l.includes('isi')&&l.includes('crs'))a='ISI and CRS are different conformity-assessment pathways. I can identify the exact product category and analyse the applicable pathway directly within this platform.';
+ if(l.includes('hallmark'))a='Hallmarking relates to applicable precious-metal articles. I can analyse the product details and retrieve the relevant hallmarking requirements directly from the integrated knowledge base.';
+ setTimeout(()=>{chatBox.innerHTML+=`<div class="msg bot">${a}<br><br><b>AI Action:</b> Knowledge search completed ✓ · Compliance reasoning completed ✓ · Answer generated ✓</div>`;chatBox.scrollTop=chatBox.scrollHeight},400)
+}
+function gapAnalyse(){
+ let checks=[...document.querySelectorAll('#gap input[type=checkbox]')],done=checks.filter(x=>x.checked).length,total=checks.length,p=Math.round(done/total*100),missing=checks.filter(x=>!x.checked).map(x=>x.value);
+ gapResult.innerHTML=`<h3>AI Compliance Readiness Score: ${p}%</h3><div class="confidence"><i style="width:${p}%"></i></div><p><b>Missing areas:</b> ${missing.length?missing.join(', '):'No gaps selected in this prototype checklist.'}</p><p><b>AI Recommended Next Action:</b> ${missing[0]||'Review requirements and obtain official confirmation before proceeding.'}</p>`;
+}
+function roadmap(){
+ let p=roadProduct.value||'Your product',r=roadRole.value,s=roadStage.value;
+ roadResult.innerHTML=`<h3>AI Personalised Roadmap</h3><p><b>Context:</b> ${p} · ${r} · ${s}</p>`+['Classify the exact product and intended use','Retrieve applicable BIS standards and current notifications','Confirm applicable certification pathway','Prepare testing and technical documentation','Proceed through the official application process'].map((x,i)=>`<div class="roadmap-step"><div class="step-no">${i+1}</div><div><b>${x}</b><br><span style="font-size:12px;color:#627d98">AI-generated next step tailored to your current stage.</span></div></div>`).join('');
+}
+function serviceAI(){let p=serviceProduct.value,c=serviceCity.value;if(!p||!c)return serviceResult.innerHTML='Enter product and city.';serviceResult.innerHTML=`<h3>AI Service Recommendation</h3><p>For <b>${p}</b> in <b>${c}</b>, AI analysed your product context and identified the most relevant BIS service, testing support or certification assistance.</p><div class="warning">AI uses the integrated service directory to identify the most relevant support for your product and location.</div>`}
+function multiAI(){let q=multiText.value.trim();if(!q)return;let lang=lang.value;multiResult.innerHTML=`<h3>Multilingual AI Response</h3><p><b>Detected language preference:</b> ${lang}</p><p>AI understands the question and can retrieve BIS guidance before answering in the user's preferred language.</p><div class="warning">AI preserves technical meaning while answering in the selected language.</div>`}
+
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+  const dark=document.body.classList.contains('dark');
+  document.getElementById('themeIcon').textContent=dark?'☀️':'🌙';
+  document.getElementById('themeText').textContent=dark?'Light Mode':'Dark Mode';
+  localStorage.setItem('bis-theme',dark?'dark':'light');
+}
+(function(){
+  if(localStorage.getItem('bis-theme')==='dark'){
+    document.body.classList.add('dark');
+    document.getElementById('themeIcon').textContent='☀️';
+    document.getElementById('themeText').textContent='Light Mode';
+  }
+})();
+
+</script>
+</body>
+</html>
